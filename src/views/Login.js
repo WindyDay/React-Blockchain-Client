@@ -1,8 +1,39 @@
 import React, {Component} from 'react';
 import './LoginStyle.css';
+const md5 = require('js-md5');
 
 var inLogin = null;
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Email: '',
+      Password: '',
+      ConfirmPassword: ''
+
+    };
+
+    this.handleChange = this
+      .handleChange
+      .bind(this);
+    this.cambiar_sign_up = this
+      .cambiar_sign_up
+      .bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox'
+      ? target.checked
+      : target.value;
+    const name = target.name;
+
+    this.setState({[name]: value});
+  }
+
+  // handleSubmit(event) {   alert('A name was submitted: ' + this.state.value);
+  // event.preventDefault(); }
 
   /* ------------------------------------ Click on login and Sign Up to  changue and view the effect
 ---------------------------------------
@@ -41,28 +72,36 @@ class Login extends Component {
   cambiar_sign_up(at) {
     console.log("clicked sign up");
     if (inLogin === false) {
-      // get data and do ajax
-      fetch('https://dry-taiga-41476.herokuapp.com/api/post', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({Email: "test2.IcedTea@gmail.com", Password: "123456"})
-      })
-      .then(function(response) {
-        if (response.status >= 400) {
-          //throw new Error("Bad response from server");
-          console.log("Bad response from server");
-        }
-        return response.json();
-      })
-      .then(function(stories) {
-        console.log(stories);
-      })
-      .catch((error) => {
-        console.log("error");
-      });
+      if (this.state.Password === this.state.ConfirmPassword) {
+        // get data and do ajax
+        fetch('https://dry-taiga-41476.herokuapp.com/api/post', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+            body: JSON.stringify({Email: this.state.Email, Password: md5(this.state.Password)})
+          })
+          .then(function (response) {
+            if (response.status >= 400) {
+              //throw new Error("Bad response from server");
+              console.log("Bad response from server");
+              alert("Please try with another email");
+            }
+            return response.json();
+          })
+          .then(function (stories) {
+            console.log(stories);
+          })
+          .then(() => {
+            alert("Sign up successful!");
+          })
+          .catch((error) => {
+            console.log("error");
+          });
+      }else{
+        alert("Password does not match!");
+      }
     }
 
     inLogin = false;
@@ -187,9 +226,27 @@ class Login extends Component {
                   <i class="material-icons">&#xE5C4;</i>
                 </a>
                 <h2>SIGN UP</h2>
-                <input type="email" placeholder="Email"/> {/* <!-- <input type="text" placeholder="User" /> --> */}
-                <input type="password" placeholder="Password"/>
-                <input type="password" placeholder="Confirm Password"/>
+                <input
+                  name='Email'
+                  type="email"
+                  placeholder="Email"
+                  value
+                  ={this.state.Email}
+                  onChange={this.handleChange}/> {/* <!-- <input type="text" placeholder="User" /> --> */}
+                <input
+                  name='Password'
+                  type="password"
+                  placeholder="Password"
+                  value
+                  ={this.state.Password}
+                  onChange={this.handleChange}/>
+                <input
+                  name='ConfirmPassword'
+                  type="password"
+                  placeholder="Confirm Password"
+                  value
+                  ={this.state.ConfirmPassword}
+                  onChange={this.handleChange}/>
                 <button class="btn_sign_up" onClick={this.cambiar_sign_up}>SIGN UP</button>
 
               </div>

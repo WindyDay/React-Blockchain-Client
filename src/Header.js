@@ -16,7 +16,7 @@ const Header = () => (
                     <li role="presentation">
                         <a href="myProduct.html"> </a>
                     </li>
-                </ul><a class="btn btn-info btn-sm navbar-btn navbar-right" role="button" href="registrationlogin_form.html">Sign in</a><a class="btn btn-default btn-sm navbar-btn navbar-right" role="button" href="registrationlogin_form.html">Sign up</a></div>
+                </ul><a class="btn btn-info btn-sm navbar-btn navbar-right" role="button" href="login">Sign in</a><a class="btn btn-default btn-sm navbar-btn navbar-right" role="button" href="login">Sign up</a></div>
         </div>
     </nav>
     {/* <nav>
